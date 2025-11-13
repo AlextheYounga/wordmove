@@ -50,7 +50,9 @@ describe Wordmove::Doctor::Rsync do
       doctor.check!
 
       expect(logger).to have_received(:error)
-        .with("rsync not found or the version could not be detected.")
+        .with(
+          a_string_including("rsync not found or the version could not be detected.")
+        )
     end
   end
 end
