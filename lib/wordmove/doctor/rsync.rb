@@ -12,7 +12,10 @@ module Wordmove
 
         version_output = `rsync --version | head -n1 2>&1`
 
-        if (match = /\d+\.\d+\.\d+/.match(version_output))
+        if version_output.downcase.include?('openrsync')
+          protocol_version = version_output[/protocol version (\d+)/i, 1]
+          logger.success "openrsync detected (protocol version #{protocol_version || 'unknown'})"
+        elsif (match = /\d+\.\d+\.\d+/.match(version_output))
           logger.success "rsync is installed at version #{match[0]}"
         else
           logger.error "rsync not found or the version could not be detected. "\
