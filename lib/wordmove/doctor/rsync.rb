@@ -10,10 +10,13 @@ module Wordmove
       def check!
         logger.task "Checking rsync"
 
-        if (version = /\d\.\d.\d/.match(`rsync --version | head -n1`)[0])
-          logger.success "rsync is installed at version #{version}"
+        version_output = `rsync --version | head -n1 2>&1`
+
+        if (match = /\d+\.\d+\.\d+/.match(version_output))
+          logger.success "rsync is installed at version #{match[0]}"
         else
-          logger.error "rsync not found. And belive me: it's really strange it's not there."
+          logger.error "rsync not found or the version could not be detected. "\
+                       "Output was: #{version_output.strip}"
         end
       end
     end
